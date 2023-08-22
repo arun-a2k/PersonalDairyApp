@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personal Diary</title>
+    <!-- Add your CSS styling here -->
+</head>
+<body>
+    <h1>Personal Diary</h1>
+    <div id="calendar"></div>
+    <form id="entryForm">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+        <label for="income">Income:</label>
+        <input type="number" id="income" name="income" required>
+        <label for="expense">Expense:</label>
+        <input type="number" id="expense" name="expense" required>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="monthlyView"></div>
+    <script>
+        // Add your JavaScript code for handling form submission and displaying data here
+<!-- ... (previous code) ... -->
+
+<!-- Include a JavaScript library like jQuery for easier AJAX requests -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Function to handle form submission
+    $("#entryForm").submit(function(event) {
+        event.preventDefault();
+        
+        // Get form data
+        const formData = {
+            date: $("#date").val(),
+            income: parseFloat($("#income").val()),
+            expense: parseFloat($("#expense").val()),
+            description: $("#description").val()
+        };
+
+        // Send data to server using AJAX
+        $.ajax({
+            type: "POST",
+            url: "/api/entry",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            success: function(response) {
+                // Clear form inputs and show success message
+                $("#date").val("");
+                $("#income").val("");
+                $("#expense").val("");
+                $("#description").val("");
+                alert("Diary entry saved successfully!");
+            },
+            error: function(error) {
+                alert("Error saving diary entry. Please try again.");
+            }
+        });
+    });
+
+    // Function to load and display monthly data
+    function loadMonthlyData(year, month) {
+        $.get(`/api/entries/${year}/${month}`, function(data) {
+            // Display data in the monthly view
+            // You can use data to populate your view
+        });
+    }
+</script>
+</body>
+</html>
